@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>highLight</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        .item {
+            margin-top: 10px;
+            margin-right: 40px;
+        }
+    </style>
+</head>
+<body> 
+<div id="app">
+    <el-button @click="getData" type="primary">加载</el-button>
+    <div>
+        <ul>
+            <li v-for="item in queryData" :key="item.id" v-html="item.content" style=" line-height: 30px;"></li>
+        </ul>
+    </div>
+    <el-row>
+        <el-badge v-for="item in keywordAudits" :key="item.text" class="item">
+            <el-button size="small" @click="keywordClick(item)" type="success">{{item.text}}</el-button>
+        </el-badge>
+    </el-row>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    app = new Vue({
+        el: '#app',
+        data: {
+            listShow: false,
+            queryData: [],
+            keywordAudits: [
+                {text: "微信", times: 3040},
+                {text: "群", times: 208},
+                {text: "在吗", times: 208},
+                {text: "信", times: 208}
+            ],
+            list: [
+                {id: 1, content: "在吗？在干嘛？吃饭群了吗？多喝烫水！能加个微信带我玩吗？"},
+                {id: 2, content: "吃饭了吗？多喝烫水！能加个微信带我玩吗？"},
+                {id: 3, content: "在吗？在干嘛？吃饭了吗？多喝烫水！能加个信带我玩吗？"},
+                {id: 4, content: "在吗？在干嘛？吃饭了吗？能加个带我玩吗？"},
+            ],
+        },
+        methods: {
+            getData() {
+                this.listShow = true
+                this.highlight()
+            },
+            highlight() {
+                this.queryData = JSON.parse(JSON.stringify(this.list))
+                this.queryData.map(
+                    content =>
+                        this.keywordAudits.map(text =>
+                            content.content = content.content.replace(new RegExp(text.text, 'gi'), '<font color="#f00">' + text.text + '</font>')
+                        )
+                )
+            },
+            keywordClick(item) {
+                this.listShow = !this.listShow
+                if (!this.listShow) {
+                    this.queryData = JSON.parse(JSON.stringify(this.list))
+                    this.queryData.map(
+                        content => {
+                            content.content = content.content.replace(new RegExp(item.text, 'gi'), '<font color="#f00">' + item.text + '</font>')
+                        }
+                    )
+                }
+                else{
+                    this.getData()
+                }
+            }
+        }
+    })
+</script>
+ 
+</body>
+</html>

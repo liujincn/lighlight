@@ -32,6 +32,7 @@
         el: '#app',
         data: {
             listShow: false,
+            keywordShow:false,
             queryData: [],
             keywordAudits: [
                 {text: "微信", times: 3040},
@@ -46,10 +47,16 @@
                 {id: 4, content: "在吗？在干嘛？吃饭了吗？能加个带我玩吗？"},
             ],
         },
+        create(){
+
+        },
         methods: {
             getData() {
-                this.listShow = true
                 this.highlight()
+                if (this.listShow) {
+                    this.listShow = !this.listShow
+
+                }
             },
             highlight() {
                 this.queryData = JSON.parse(JSON.stringify(this.list))
@@ -61,7 +68,6 @@
                 )
             },
             keywordClick(item) {
-                this.listShow = !this.listShow
                 if (!this.listShow) {
                     this.queryData = JSON.parse(JSON.stringify(this.list))
                     this.queryData.map(
@@ -71,9 +77,11 @@
                     )
                 }
                 else{
-                    this.getData()
+                    this.highlight()
                 }
+                this.listShow = !this.listShow
             }
+
         }
     })
 </script>
